@@ -47,10 +47,10 @@ int main(int argc, char* argv[])
 
 	/* Initialize SDL */
 	if (SDL_Init(SDL_INIT_VIDEO))
-        SDL_Log("SDL error: %s", SDL_GetError());
+		SDL_Log("SDL error: %s", SDL_GetError());
 
 	if (SDL_CreateWindowAndRenderer(320 * DISPLAY_SCALE, 200 * DISPLAY_SCALE, 0, &window, &renderer))
-        SDL_Log("Window/Renderer error: %s", SDL_GetError());
+		SDL_Log("Window/Renderer error: %s", SDL_GetError());
 
 	/* Easy onversion between original world (320x200) and current screen size */
 	SDL_RenderSetScale(renderer, DISPLAY_SCALE, DISPLAY_SCALE);
@@ -61,7 +61,7 @@ int main(int argc, char* argv[])
 
 	/* Clear screen */
 	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
-    SDL_RenderClear(renderer);
+	SDL_RenderClear(renderer);
 
 	/* Start level 1 */
 	start_level(game);
@@ -149,18 +149,18 @@ void init_game(struct game_state *game)
 		strcat(fname, "level");
 		sprintf(&file_num[0],"%u",j);
 		strcat(fname, file_num);
-	    strcat(fname, ".dat");
+		strcat(fname, ".dat");
 
 		file_level = fopen(fname, "rb");
 
-	    for (i=0; i<sizeof(game->level[j].path); i++)
+		for (i=0; i<sizeof(game->level[j].path); i++)
 			game->level[j].path[i] = fgetc(file_level);
 
 		for (i=0; i<sizeof(game->level[j].tiles); i++)
 			game->level[j].tiles[i] = fgetc(file_level);
 
 		for (i=0; i<sizeof(game->level[j].padding); i++)
-		    game->level[j].padding[i] = fgetc(file_level);
+			game->level[j].padding[i] = fgetc(file_level);
 
 		fclose(file_level);
 	}
@@ -186,7 +186,7 @@ void init_assets(struct game_assets *assets, SDL_Renderer *renderer)
 		strcat(fname, "tile");
 		sprintf(&file_num[0],"%u",i);
 		strcat(fname, file_num);
-	    strcat(fname, ".bmp");
+		strcat(fname, ".bmp");
 
 		/* Handle Dave tile masks */
 		if ((i >= 53 && i <= 59) || i == 67 || i == 68 || (i >= 71 && i <= 73) || (i >= 77 && i <= 82))
@@ -201,10 +201,10 @@ void init_assets(struct game_assets *assets, SDL_Renderer *renderer)
 				mask_offset = 6;
 
 			mname[0]='\0';
-		    strcat(mname, "tile");
-		    sprintf(&mask_num[0],"%u",i+mask_offset);
-		    strcat(mname, mask_num);
-	        strcat(mname, ".bmp");
+			strcat(mname, "tile");
+			sprintf(&mask_num[0],"%u",i+mask_offset);
+			strcat(mname, mask_num);
+			strcat(mname, ".bmp");
 
 			surface = SDL_LoadBMP(fname);
 			mask = SDL_LoadBMP(mname);
@@ -218,8 +218,8 @@ void init_assets(struct game_assets *assets, SDL_Renderer *renderer)
 
 			/* Make white mask transparent */
 			SDL_SetColorKey(surface, 1, SDL_MapRGB(surface->format, 0xFF, 0xFF, 0xFF));
-		    assets->graphics_tiles[i] = SDL_CreateTextureFromSurface(renderer, surface);
-		    SDL_FreeSurface(surface);
+			assets->graphics_tiles[i] = SDL_CreateTextureFromSurface(renderer, surface);
+			SDL_FreeSurface(surface);
 			SDL_FreeSurface(mask);
 		}
 		else
@@ -229,7 +229,7 @@ void init_assets(struct game_assets *assets, SDL_Renderer *renderer)
 			/* Monster tiles should use black transparency */
 			if ((i >= 89 && i <= 120 ) || (i >= 129 && i <= 132 ))
 				SDL_SetColorKey(surface, 1, SDL_MapRGB(surface->format, 0x00, 0x00, 0x00));
-		    assets->graphics_tiles[i] = SDL_CreateTextureFromSurface(renderer, surface);
+			assets->graphics_tiles[i] = SDL_CreateTextureFromSurface(renderer, surface);
 		}
 	}
 }
@@ -240,31 +240,31 @@ void check_input(struct game_state *game)
 	SDL_Event event;
 	SDL_PollEvent(&event);
 	const uint8_t *keystate = SDL_GetKeyboardState(NULL);
-    if ( keystate[SDL_SCANCODE_RIGHT] )
-	    game->try_right = 1;
+	if ( keystate[SDL_SCANCODE_RIGHT] )
+		game->try_right = 1;
 	if ( keystate[SDL_SCANCODE_LEFT] )
-	    game->try_left = 1;
+		game->try_left = 1;
 	if ( keystate[SDL_SCANCODE_UP] )
-	    game->try_jump = 1;
+		game->try_jump = 1;
 	if ( keystate[SDL_SCANCODE_DOWN] )
-	    game->try_down = 1;
+		game->try_down = 1;
 	if ( keystate[SDL_SCANCODE_LCTRL] )
-	    game->try_fire = 1;
+		game->try_fire = 1;
 	if ( keystate[SDL_SCANCODE_LALT] )
-	    game->try_jetpack = 1;
-    if (event.type == SDL_QUIT)
-        game->quit = 1;
+		game->try_jetpack = 1;
+	if (event.type == SDL_QUIT)
+		game->quit = 1;
 }
 
 /* Updates world, entities, and handles input flags .
    Second step of the game loop */
 void update_game(struct game_state *game)
 {
-    check_collision(game);
+	check_collision(game);
 	pickup_item(game, game->check_pickup_x, game->check_pickup_y);
 	update_dbullet(game);
 	update_ebullet(game);
-    verify_input(game);
+	verify_input(game);
 	move_dave(game);
 	move_monsters(game);
 	fire_monsters(game);
@@ -277,8 +277,8 @@ void update_game(struct game_state *game)
 /* Renders the world. First step of the game loop */
 void render(struct game_state *game, SDL_Renderer *renderer, struct game_assets *assets)
 {
-    /* Clear back buffer with black */
-    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
+	/* Clear back buffer with black */
+	SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0x00);
 	SDL_RenderClear(renderer);
 
 	/* Draw world elements */
@@ -317,7 +317,7 @@ void check_collision(struct game_state *game)
 
 	/* Don't check outside the room */
 	if (grid_x < 100 && grid_y < 10)
-	    type = game->level[game->current_level].tiles[grid_y*100+grid_x];
+		type = game->level[game->current_level].tiles[grid_y*100+grid_x];
 	else
 		type = 0;
 
@@ -350,7 +350,7 @@ void pickup_item(struct game_state *game, uint8_t grid_x, uint8_t grid_y)
 
 	/* No pickups outside of the world (or you'll lbe eaten by the grue) */
 	if (!grid_x || !grid_y || grid_x > 100 || grid_y > 10)
-	    return;
+		return;
 
 	/* Get the type */
 	type = game->level[game->current_level].tiles[grid_y*100+grid_x];
@@ -360,15 +360,15 @@ void pickup_item(struct game_state *game, uint8_t grid_x, uint8_t grid_y)
 	{
 		/* Jetpack pickup */
 		case 4:
-	    {
+		{
 			game->jetpack = 0xFF;
 		} break;
 		/* Trophy pickup */
 		case 10:
 		{
-		    add_score(game,1000);
+			add_score(game,1000);
 			game->trophy = 1;
-	    } break;
+		} break;
 		/* Gun pickup */
 		case 20: game->gun = 1; break;
 		/* Collectibls pickup */
@@ -392,18 +392,18 @@ void pickup_item(struct game_state *game, uint8_t grid_x, uint8_t grid_y)
 /* Move Dave's bullets */
 void update_dbullet(struct game_state *game)
 {
-    uint8_t i, grid_x, grid_y, mx, my;
+	uint8_t i, grid_x, grid_y, mx, my;
 
 	grid_x = game->dbullet_px / TILE_SIZE;
 	grid_y = game->dbullet_py / TILE_SIZE;
 
 	/* Not active */
-    if (!game->dbullet_px || !game->dbullet_py)
-	    return;
+	if (!game->dbullet_px || !game->dbullet_py)
+		return;
 
 	/* Bullet hit something - deactivate */
 	if (!is_clear(game, game->dbullet_px, game->dbullet_py, 0))
-	    game->dbullet_px = game->dbullet_py = 0;
+		game->dbullet_px = game->dbullet_py = 0;
 
 	/* Bullet left room - deactivate */
 	if (grid_x-game->view_x < 1 || grid_x - game->view_x > 20)
@@ -416,10 +416,10 @@ void update_dbullet(struct game_state *game)
 		/* Check all monster positions */
 		for (i=0;i<5;i++)
 		{
-		    if (game->monster[i].type)
+			if (game->monster[i].type)
 			{
-                mx = game->monster[i].monster_x;
-			    my = game->monster[i].monster_y;
+				mx = game->monster[i].monster_x;
+				my = game->monster[i].monster_y;
 
 				if ((grid_y == my || grid_y == my + 1) && (grid_x == mx || grid_x == mx+1))
 				{
@@ -435,11 +435,11 @@ void update_dbullet(struct game_state *game)
 
 void update_ebullet(struct game_state *game)
 {
-    if (!game->ebullet_px || !game->ebullet_py)
-	    return;
+	if (!game->ebullet_px || !game->ebullet_py)
+		return;
 
 	if (!is_clear(game, game->ebullet_px, game->ebullet_py, 0))
-	    game->ebullet_px = game->ebullet_py = 0;
+		game->ebullet_px = game->ebullet_py = 0;
 
 	if (!is_visible(game, game->ebullet_px))
 		game->ebullet_px = game->ebullet_py = 0;
@@ -447,7 +447,7 @@ void update_ebullet(struct game_state *game)
 	if (game->ebullet_px)
 	{
 		uint8_t grid_x, grid_y;
-	    game->ebullet_px += game->ebullet_dir * 4;
+		game->ebullet_px += game->ebullet_dir * 4;
 
 		grid_x = game->ebullet_px / TILE_SIZE;
 		grid_y = game->ebullet_py / TILE_SIZE;
@@ -471,8 +471,8 @@ void start_level(struct game_state *game)
 	/* Deactivate monsters */
 	for (i=0;i<5;i++)
 	{
-	    game->monster[i].type = 0;
-	    game->monster[i].path_index = 0;
+		game->monster[i].type = 0;
+		game->monster[i].path_index = 0;
 		game->monster[i].dead_timer = 0;
 		game->monster[i].next_px = 0;
 		game->monster[i].next_py = 0;
@@ -662,7 +662,7 @@ void move_dave(struct game_state *game)
 	}
 
 	/* Move Dave right */
-    if (game->dave_right)
+	if (game->dave_right)
 	{
 		game->dave_px += 2;
 		game->last_dir = 1;
@@ -738,10 +738,10 @@ void move_dave(struct game_state *game)
 
 		/* Bullet should start in front of Dave */
 		if (game->dbullet_dir == 1)
-		    game->dbullet_px = game->dave_px + 18;
+			game->dbullet_px = game->dave_px + 18;
 
 		if (game->dbullet_dir == -1)
-		    game->dbullet_px = game->dave_px -8;
+			game->dbullet_px = game->dave_px -8;
 
 		game->dbullet_py = game->dave_py + 8;
 		game->dave_fire = 0;
@@ -760,8 +760,8 @@ void move_monsters(struct game_state *game)
 
 		if (m->type && !m->dead_timer)
 		{
-	        /* Move monster twice each tick. Hack to match speed of original game */
-	        for (j=0;j<2;j++)
+			/* Move monster twice each tick. Hack to match speed of original game */
+			for (j=0;j<2;j++)
 			{
 				if (!m->next_px && !m->next_py)
 				{
@@ -811,7 +811,7 @@ void move_monsters(struct game_state *game)
 			/* Update monster grid position */
 			m->monster_x = m->monster_px / TILE_SIZE;
 			m->monster_y = m->monster_py / TILE_SIZE;
-        }
+		}
 	}
 }
 
@@ -863,10 +863,10 @@ void scroll_screen(struct game_state *game)
 		/* Cap right side at 80 (each level is 100 wide) */
 		if (game->view_x == 80)
 			game->scroll_x = 0;
-	    else
+		else
 		{
-		    game->view_x++;
-		    game->scroll_x--;
+			game->view_x++;
+			game->scroll_x--;
 		}
 	}
 
@@ -877,8 +877,8 @@ void scroll_screen(struct game_state *game)
 			game->scroll_x = 0;
 		else
 		{
-		    game->view_x--;
-		    game->scroll_x++;
+			game->view_x--;
+			game->scroll_x++;
 		}
 	}
 }
@@ -888,8 +888,8 @@ void apply_gravity(struct game_state *game)
 {
 	if (!game->dave_jump && !game->on_ground && !game->dave_jetpack && !game->dave_climb)
 	{
-	    if (is_clear(game, game->dave_px+4, game->dave_py+17, 1))
-		    game->dave_py+=2;
+		if (is_clear(game, game->dave_px+4, game->dave_py+17, 1))
+			game->dave_py+=2;
 		else
 		{
 			uint8_t not_align;
@@ -898,8 +898,8 @@ void apply_gravity(struct game_state *game)
 			/* If Dave is not level aligned, lock him to nearest tile*/
 			if (not_align)
 			{
-			    game->dave_py = not_align < 8 ?
-				    game->dave_py - not_align :
+				game->dave_py = not_align < 8 ?
+					game->dave_py - not_align :
 					game->dave_py + TILE_SIZE-not_align;
 			}
 		}
@@ -909,21 +909,21 @@ void apply_gravity(struct game_state *game)
 /* Handle level-wide events */
 void update_level(struct game_state *game)
 {
-    uint8_t i;
+	uint8_t i;
 
 	/* Increment game dick timer */
 	game->tick++;
 
 	/* Decrement jetpack delay */
-    if (game->jetpack_delay)
-        game->jetpack_delay--;
+	if (game->jetpack_delay)
+		game->jetpack_delay--;
 
 	/* Decrement Dave's jetpack fuel */
 	if (game->dave_jetpack)
 	{
-        game->jetpack--;
-	    if (!game->jetpack)
-		    game->dave_jetpack = 0;
+		game->jetpack--;
+		if (!game->jetpack)
+			game->dave_jetpack = 0;
 	}
 
 	/* Check if Dave completes level */
@@ -935,8 +935,8 @@ void update_level(struct game_state *game)
 
 			if (game->current_level < 9)
 			{
-		        game->current_level++;
-			    start_level(game);
+				game->current_level++;
+				start_level(game);
 			}
 			else
 			{
@@ -945,7 +945,7 @@ void update_level(struct game_state *game)
 			}
 		}
 		else
-		    game->check_door = 0;
+			game->check_door = 0;
 	}
 
 	/* Reset level when Dave is dead */
@@ -961,7 +961,7 @@ void update_level(struct game_state *game)
 
 			}
 			else
-			    game->quit = 1;
+				game->quit = 1;
 		}
 	}
 
@@ -1040,14 +1040,14 @@ void draw_world(struct game_state *game, struct game_assets *assets, SDL_Rendere
 	{
 		dest.y = TILE_SIZE + j * TILE_SIZE;
 		dest.w = TILE_SIZE;
-	    dest.h = TILE_SIZE;
+		dest.h = TILE_SIZE;
 		for (i=0; i < 20; i++)
 		{
 			dest.x = i * TILE_SIZE;
 			tile_index = game->level[game->current_level].tiles[j*100+game->view_x+i];
 			tile_index = update_frame(game,tile_index,i);
-	        SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
-	    }
+			SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
+		}
 	}
 }
 
@@ -1064,7 +1064,7 @@ void draw_dave(struct game_state *game, struct game_assets *assets, SDL_Renderer
 
 	/* Find the right Dave tile based on his condition */
 	if (!game->last_dir)
-	    tile_index = 56;
+		tile_index = 56;
 	else
 	{
 		tile_index = game->last_dir > 0 ? 53 : 57;
@@ -1075,11 +1075,11 @@ void draw_dave(struct game_state *game, struct game_assets *assets, SDL_Renderer
 		tile_index = game->last_dir >= 0 ? 77 : 80;
 	else
 	{
-	    if (game->dave_jump || !game->on_ground)
-		    tile_index = game->last_dir >= 0 ? 67 : 68;
+		if (game->dave_jump || !game->on_ground)
+			tile_index = game->last_dir >= 0 ? 67 : 68;
 
 		if (game->dave_climb)
-		    tile_index = 71 + (game->dave_tick/5) % 3;
+			tile_index = 71 + (game->dave_tick/5) % 3;
 	}
 
 	if (game->dave_dead_timer)
@@ -1091,19 +1091,19 @@ void draw_dave(struct game_state *game, struct game_assets *assets, SDL_Renderer
 /* Render Dave's bullets */
 void draw_dave_bullet(struct game_state *game, struct game_assets *assets, SDL_Renderer *renderer)
 {
-    SDL_Rect dest;
-    uint8_t tile_index;
+	SDL_Rect dest;
+	uint8_t tile_index;
 
-    if (!game->dbullet_px || !game->dbullet_py)
-	    return;
+	if (!game->dbullet_px || !game->dbullet_py)
+		return;
 
-    dest.x = game->dbullet_px - game->view_x * TILE_SIZE;
-    dest.y = TILE_SIZE + game->dbullet_py;
-    dest.w = 12;
-    dest.h = 3;
-    tile_index = game->dbullet_dir > 0 ? 127 : 128;
+	dest.x = game->dbullet_px - game->view_x * TILE_SIZE;
+	dest.y = TILE_SIZE + game->dbullet_py;
+	dest.w = 12;
+	dest.h = 3;
+	tile_index = game->dbullet_dir > 0 ? 127 : 128;
 
-    SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
+	SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
 }
 
 /* Render Monster bullets */
@@ -1115,9 +1115,9 @@ void draw_monster_bullet(struct game_state *game, struct game_assets *assets, SD
 	if (game->ebullet_px && game->ebullet_px)
 	{
 		dest.x = game->ebullet_px - game->view_x * TILE_SIZE;
-	    dest.y = TILE_SIZE + game->ebullet_py;
-	    dest.w = 12;
-	    dest.h = 3;
+		dest.y = TILE_SIZE + game->ebullet_py;
+		dest.w = 12;
+		dest.h = 3;
 		tile_index = game->ebullet_dir > 0 ? 121 : 124;
 
 		SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
@@ -1148,8 +1148,8 @@ void draw_monsters(struct game_state *game, struct game_assets *assets, SDL_Rend
 
 			if (m->type >= 105 && m->type <= 108 && !m->dead_timer)
 			{
-			    dest.w = 18;
-			    dest.h = 8;
+				dest.w = 18;
+				dest.h = 8;
 			}
 
 			SDL_RenderCopy(renderer, assets->graphics_tiles[tile_index], NULL, &dest);
@@ -1222,10 +1222,10 @@ void draw_ui(struct game_state *game, struct game_assets *assets, SDL_Renderer *
 	/* Life count icon */
 	for (i=0; i<game->lives;i++)
 	{
-	    dest.x = (255+16*i);
-	    dest.w = 16;
-	    dest.h = 12;
-	    SDL_RenderCopy(renderer, assets->graphics_tiles[143], NULL, &dest);
+		dest.x = (255+16*i);
+		dest.w = 16;
+		dest.h = 12;
+		SDL_RenderCopy(renderer, assets->graphics_tiles[143], NULL, &dest);
 	}
 
 	/* Trophy pickup banner */
@@ -1233,9 +1233,9 @@ void draw_ui(struct game_state *game, struct game_assets *assets, SDL_Renderer *
 	{
 		dest.x = 72;
 		dest.y = 180;
-	    dest.w = 176;
-	    dest.h = 14;
-	    SDL_RenderCopy(renderer, assets->graphics_tiles[138], NULL, &dest);
+		dest.w = 176;
+		dest.h = 14;
+		SDL_RenderCopy(renderer, assets->graphics_tiles[138], NULL, &dest);
 	}
 
 	/* Gun pickup banner */
@@ -1244,8 +1244,8 @@ void draw_ui(struct game_state *game, struct game_assets *assets, SDL_Renderer *
 		dest.x = 255;
 		dest.y = 180;
 		dest.w = 62;
-	    dest.h = 11;
-	    SDL_RenderCopy(renderer, assets->graphics_tiles[134], NULL, &dest);
+		dest.h = 11;
+		SDL_RenderCopy(renderer, assets->graphics_tiles[134], NULL, &dest);
 	}
 
 	/* Jetpack UI elements */
@@ -1255,21 +1255,21 @@ void draw_ui(struct game_state *game, struct game_assets *assets, SDL_Renderer *
 		dest.x = 1;
 		dest.y = 177;
 		dest.w = 62;
-	    dest.h = 11;
-	    SDL_RenderCopy(renderer, assets->graphics_tiles[133], NULL, &dest);
+		dest.h = 11;
+		SDL_RenderCopy(renderer, assets->graphics_tiles[133], NULL, &dest);
 
 		/* Jetpack fuel counter */
 		dest.x = 1;
 		dest.y = 190;
 		dest.w = 62;
-	    dest.h = 8;
+		dest.h = 8;
 		SDL_RenderCopy(renderer, assets->graphics_tiles[141], NULL, &dest);
 
 		/* Jetpack fuel bar */
 		dest.x = 2;
 		dest.y = 192;
 		dest.w = game->jetpack * 0.23;
-	    dest.h = 4;
+		dest.h = 4;
 		SDL_SetRenderDrawColor(renderer, 0xEE, 0x00, 0x00, 0xFF);
 		SDL_RenderFillRect(renderer, &dest);
 	}
@@ -1287,7 +1287,7 @@ uint8_t is_clear(struct game_state *game, uint16_t px, uint16_t py, uint8_t is_d
 	grid_y = py / TILE_SIZE;
 
 	if (grid_x > 99 || grid_y > 9)
-	    return 1;
+		return 1;
 
 	type = game->level[game->current_level].tiles[grid_y*100+grid_x];
 
@@ -1309,31 +1309,31 @@ uint8_t is_clear(struct game_state *game, uint16_t px, uint16_t py, uint8_t is_d
 	/* Dave-only collision checks (pickups) */
 	if (is_dave)
 	{
-	    switch (type)
-	    {
-		    case 2: game->check_door = 1; break;
-		    case 4:
-		    case 10:
-		    case 20:
-		    case 47:
-		    case 48:
-		    case 49:
-		    case 50:
-		    case 51:
-		    case 52:
-		    {
-			    game->check_pickup_x = grid_x;
-			    game->check_pickup_y = grid_y;
-		    } break;
+		switch (type)
+		{
+			case 2: game->check_door = 1; break;
+			case 4:
+			case 10:
+			case 20:
+			case 47:
+			case 48:
+			case 49:
+			case 50:
+			case 51:
+			case 52:
+			{
+				game->check_pickup_x = grid_x;
+				game->check_pickup_y = grid_y;
+			} break;
 			case 6:
 			case 25:
 			case 36:
 			{
 				if (!game->dave_dead_timer)
-				    game->dave_dead_timer = 30;
+					game->dave_dead_timer = 30;
 			} break;
-		    default: break;
-	    }
+			default: break;
+		}
 	}
 
 	return 1;
