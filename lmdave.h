@@ -60,7 +60,7 @@ struct game_state {
 	uint8_t on_ground;
 	int8_t scroll_x;
 	int8_t last_dir;
-	
+
 	uint8_t dave_right;
 	uint8_t dave_left;
 	uint8_t dave_jump;
@@ -86,9 +86,9 @@ struct game_state {
 	uint8_t trophy;
 	uint8_t gun;
 	uint8_t jetpack;
-	
+
 	struct monster_state monster[5];
-	
+
 	struct dave_level level[10];
 };
 
