@@ -17,21 +17,21 @@ struct dave_level {
 int main(int argc, char* argv[])
 {
 	const uint32_t level_addr = 0x26e0a;
-	
+
 	/* Allocate space for 10 game levels */
 	struct dave_level level[10];
-	
+
 	/* Open EXE file and go to level data */
 	FILE *fin;
 	fin = fopen("DAVE.EXE","rb");
 	fseek (fin, level_addr, SEEK_SET);
-	
+
 	/* Stream level data to memory and output files */
 	FILE *fout;
 	char file_num[4];
 	char fname[12];
 	uint32_t i,j,k;
-	
+
 	for (j=0; j<10; j++)
 	{
 		/* Make new file */
@@ -40,35 +40,35 @@ int main(int argc, char* argv[])
 		sprintf(&file_num[0], "%u", j);
 		strcat(fname, file_num);
 		strcat(fname, ".dat");
-		
+
 		fout = fopen(fname, "wb");
-		
+
 		/* Stream path data */
 		for (i=0; i< sizeof(level[j].path); i++)
 		{
 			level[j].path[i] = fgetc(fin);
 			fputc(level[j].path[i], fout);
 		}
-		
+
 		/* Stream tile indices */
 		for (i=0; i< sizeof(level[j].tiles); i++)
 		{
 			level[j].tiles[i] = fgetc(fin);
 			fputc(level[j].tiles[i], fout);
 		}
-		
+
 		/* Stream padding */
 		for (i=0; i< sizeof(level[j].padding); i++)
 		{
 			level[j].padding[i] = fgetc(fin);
 			fputc(level[j].padding[i], fout);
 		}
-		
+
 		printf("Saving %s as level data", fname);
 		fclose(fout);
 	}
 	fclose(fin);
-	
+
 	/* Load tileset */
 	SDL_Surface *tiles[158];
 	for (i=0; i<158; i++)
@@ -78,10 +78,10 @@ int main(int argc, char* argv[])
 		sprintf(&file_num[0], "%u", i);
 		strcat(fname, file_num);
 		strcat(fname, ".bmp");
-		
+
 		tiles[i] = SDL_LoadBMP(fname);
 	}
-	
+
 	/* Create map of the world by level, row, and column */
 	SDL_Surface *map;
 	SDL_Rect dest;
@@ -103,6 +103,6 @@ int main(int argc, char* argv[])
 		}
 	}
 	SDL_SaveBMP(map, "map.bmp");
-	
+
 	return 0;
 }
